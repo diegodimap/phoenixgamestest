@@ -53,9 +53,9 @@ class UserResourceIntegrationTest {
 
     @Nested
     @DisplayName("getUserProfile")
-    class GetUserProfile {
+    static class GetUserProfile {
         private static final String USER_ID_PATH_PARAM = "userId";
-        private static final String URL = "/users/{%s}/profile".formatted(USER_ID_PATH_PARAM);
+        private static final String URL = "/users/{%s}/profile".format(USER_ID_PATH_PARAM);
 
         @Test
         void existingUser_correctObjectIsReturned(ClientSupport client, UserProfileDao userProfileDao) {

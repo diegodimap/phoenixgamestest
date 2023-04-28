@@ -17,6 +17,6 @@ public class UserProfileDaoInMemory implements UserProfileDao {
 
     @Override
     public void put(UserProfile userProfile) {
-        storage.put(userProfile.userId(), userProfile);
+        storage.put(userProfile.getUserId(), userProfile);
     }
 }
