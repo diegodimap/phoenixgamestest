@@ -1,0 +1,73 @@
+plugins {
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'com.adarshr.test-logger' version '3.2.0'
+    id 'jacoco'
+}
+
+repositories {
+    mavenCentral()
+}
+
+wrapper {
+    gradleVersion = '8.0.2'
+}
+
+application {
+    sourceCompatibility = '17'
+    group 'com.spotlight.platform'
+    version '1.0.0-SNAPSHOT'
+    mainClassName = 'com.spotlight.platform.userprofile.api.web.UserProfileApiApplication'
+}
+
+compileJava {
+    options.compilerArgs << "-Werror" << '-Xlint:unchecked'
+    options.deprecation = true
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    mergeServiceFiles()
+    dependsOn(distTar, distZip)
+}
+
+test {
+    useJUnitPlatform()
+    testlogger {
+        showStandardStreams = true
+    }
+    systemProperties = [
+            'junit.jupiter.execution.parallel.enabled'             : 'true',
+            'junit.jupiter.execution.parallel.mode.classes.default': 'concurrent',
+            'junit.jupiter.execution.parallel.mode.default'        : 'concurrent'
+    ]
+}
+
+check {
+    finalizedBy jacocoTestReport
+    finalizedBy jacocoTestCoverageVerification
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        failOnViolation = true
+        rule {
+            limit {
+                minimum = 0.95
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation platform('io.dropwizard:dropwizard-bom:2.1.6')
+    implementation 'io.dropwizard:dropwizard-testing'
+    implementation 'ru.vyarus:dropwizard-guicey:5.7.1'
+
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testImplementation 'org.mockito:mockito-core:5.2.0'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
+    testImplementation 'net.javacrumbs.json-unit:json-unit:2.37.0'
+    testImplementation 'net.javacrumbs.json-unit:json-unit-assertj:2.37.0'
+}
