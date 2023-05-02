@@ -1,5 +1,6 @@
 package com.spotlight.platform.userprofile.api.core.profile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.spotlight.platform.userprofile.api.core.exceptions.EntityNotFoundException;
 import com.spotlight.platform.userprofile.api.core.profile.persistence.UserProfileDao;
 import com.spotlight.platform.userprofile.api.model.profile.UserProfile;
@@ -21,5 +22,17 @@ public class UserProfileService {
 
     public String add(UserProfile userProfile) {
         return userProfileDao.put(userProfile);
+    }
+
+    public String list() throws JsonProcessingException {
+        return userProfileDao.list();
+    }
+
+    public String delete(UserId userId) {
+        return userProfileDao.delete(userId);
+    }
+
+    public String update(UserProfile userProfile) {
+        return userProfileDao.update(userProfile);
     }
 }

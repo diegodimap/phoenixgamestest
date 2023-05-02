@@ -18,16 +18,12 @@ public class UserProfile {
 
     private UserId userId;
 
-    String nome;
-
-    Instant latestUpdateTime;
+    String latestUpdateTime;
 
     Map<UserProfilePropertyName, UserProfilePropertyValue> userProfileProperties;
 
-    public UserProfile(){}
-
     public UserProfile(@JsonProperty("userId") UserId userId,
-                       @JsonProperty("latestUpdateTime") @JsonFormat(shape = JsonFormat.Shape.STRING) Instant latestUpdateTime,
+                       @JsonProperty("latestUpdateTime") @JsonFormat(shape = JsonFormat.Shape.STRING) String latestUpdateTime,
                        @JsonProperty("userProfileProperties") Map<UserProfilePropertyName, UserProfilePropertyValue> userProfileProperties){
 
         this.userId = userId;

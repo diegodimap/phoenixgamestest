@@ -1,7 +1,9 @@
 package com.spotlight.platform.userprofile.api.web.resources;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.spotlight.platform.userprofile.api.core.profile.UserProfileService;
 import com.spotlight.platform.userprofile.api.core.profile.persistence.UserProfileDao;
 import com.spotlight.platform.userprofile.api.model.command.CommandProcesser;
@@ -27,8 +29,6 @@ public class UserResource {
     private final UserProfileService userProfileService;
     private final CommandProcesser commandProcesser;
 
-    private final UserProfileDao userProfileDao;
-
     //local JsonMapper was throwing a NPE (JsonMapper.MAPPER_INSTANCE.readValue(cmd, ReceivedCommand.class))
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -36,7 +36,6 @@ public class UserResource {
     public UserResource(UserProfileService userProfileService, CommandProcesser commandProcesser) {
         this.userProfileService = userProfileService;
         this.commandProcesser = commandProcesser;
-        userProfileDao = null;
     }
 
     @Path("fill")
@@ -49,14 +48,14 @@ public class UserResource {
         userProfileProperties1.put(new UserProfilePropertyName("currentGold"), new UserProfilePropertyValue(500));
         userProfileProperties1.put(new UserProfilePropertyName("currentGems"), new UserProfilePropertyValue(800));
 
-        UserProfile userProfile1 = new UserProfile(userId1, now, userProfileProperties1);
+        UserProfile userProfile1 = new UserProfile(userId1, now.toString(), userProfileProperties1);
 
         UserId userId2 = new UserId("e82b1250-ee91-4105-961a-0410e6a1d01e");
         Map<UserProfilePropertyName, UserProfilePropertyValue> userProfileProperties2 = new HashMap<>();
         userProfileProperties2.put(new UserProfilePropertyName("currentGold"), new UserProfilePropertyValue(200));
         userProfileProperties2.put(new UserProfilePropertyName("currentGems"), new UserProfilePropertyValue(100));
 
-        UserProfile userProfile2 = new UserProfile(userId2, now, userProfileProperties2);
+        UserProfile userProfile2 = new UserProfile(userId2, now.toString(), userProfileProperties2);
 
         userProfileService.add(userProfile1);
         userProfileService.add(userProfile2);
@@ -64,24 +63,71 @@ public class UserResource {
         return "users added to storage";
     }
 
-    //CRUD UserProfile
     @Path("add")
     @POST
     public String addUserProfile(@Valid @PathParam("userId") UserId userId, String userProfileJson) throws JsonProcessingException {
 
-        //read id
+        UserId userId1 = new UserId(userId.toString());
+        Instant now = Instant.now();
+        Map<UserProfilePropertyName, UserProfilePropertyValue> userProfileProperties1 = new HashMap<>();
 
-        //read every single property
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode properties = mapper.readTree(userProfileJson);
 
-        UserProfile userProfile = objectMapper.readValue(userProfileJson, UserProfile.class);
+        userProfileProperties1.put(new UserProfilePropertyName("currentGold"), new UserProfilePropertyValue(properties.get("userProfileProperties").get("currentGold")));
+        userProfileProperties1.put(new UserProfilePropertyName("currentGems"), new UserProfilePropertyValue(properties.get("userProfileProperties").get("currentGems")));
 
-        return userProfileService.add(userProfile);
+        UserProfile userProfile = new UserProfile(userId1, now.toString(), userProfileProperties1);
+
+        userProfileService.add(userProfile);
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(userProfileService.get(userId));
+
+        return json;
     }
 
     @Path("profile")
     @GET
-    public UserProfile getUserProfile(@Valid @PathParam("userId") UserId userId) {
-        return userProfileService.get(userId);
+    public String getUserProfile(@Valid @PathParam("userId") UserId userId) throws JsonProcessingException {
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(userProfileService.get(userId));
+        return json;
+    }
+
+    @Path("list")
+    @GET
+    public String listUserProfiles() throws JsonProcessingException {
+        return userProfileService.list();
+    }
+
+    @Path("delete")
+    @DELETE
+    public String deleteUserProfile(@Valid @PathParam("userId") UserId userId) throws JsonProcessingException {
+        return userProfileService.delete(userId);
+    }
+
+    @Path("update")
+    @PUT
+    public String updateUserProfile(@Valid @PathParam("userId") UserId userId, String userProfileJson) throws JsonProcessingException {
+        UserId userId1 = new UserId(userId.toString());
+        Instant now = Instant.now();
+        Map<UserProfilePropertyName, UserProfilePropertyValue> userProfileProperties1 = new HashMap<>();
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode properties = mapper.readTree(userProfileJson);
+
+        userProfileProperties1.put(new UserProfilePropertyName("currentGold"), new UserProfilePropertyValue(properties.get("userProfileProperties").get("currentGold")));
+        userProfileProperties1.put(new UserProfilePropertyName("currentGems"), new UserProfilePropertyValue(properties.get("userProfileProperties").get("currentGems")));
+
+        UserProfile userProfile = new UserProfile(userId1, now.toString(), userProfileProperties1);
+
+        userProfileService.update(userProfile);
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(userProfileService.get(userId));
+
+        return json;
     }
 
 

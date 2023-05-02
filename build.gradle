@@ -76,6 +76,10 @@ dependencies {
     testImplementation 'net.javacrumbs.json-unit:json-unit:2.37.0'
     testImplementation 'net.javacrumbs.json-unit:json-unit-assertj:2.37.0'
 
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.15.0'
+
+
     compileOnly 'org.projectlombok:lombok:1.18.26'
     annotationProcessor 'org.projectlombok:lombok:1.18.26'
 

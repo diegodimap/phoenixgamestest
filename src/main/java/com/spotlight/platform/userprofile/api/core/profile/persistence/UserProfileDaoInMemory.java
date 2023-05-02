@@ -1,5 +1,8 @@
 package com.spotlight.platform.userprofile.api.core.profile.persistence;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.spotlight.platform.userprofile.api.model.profile.UserProfile;
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserId;
 
@@ -20,22 +23,32 @@ public class UserProfileDaoInMemory implements UserProfileDao {
     public String put(UserProfile userProfile) {
         storage.put(userProfile.getUserId(), userProfile);
 
-        System.out.println("SAVED: " + userProfile.getUserId());
-
-        listUserProfiles();
-
         return "saved";
     }
 
-    public void listUserProfiles(){
+    public String list() throws JsonProcessingException {
+        String output = "";
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         for (Map.Entry<UserId, UserProfile> entry : storage.entrySet()) {
-            System.out.println("userId : " + entry.getValue().getUserId() + "\n");
-
-            for (Object key: entry.getValue().getUserProfileProperties().keySet()) {
-                System.out.println("key : " + key);
-                System.out.println("value : " + entry.getValue().getUserProfileProperties().get(key).getValue());
-            }
+            output += ow.writeValueAsString(entry.getValue());
         }
+
+        return output;
+    }
+
+    @Override
+    public String delete(UserId userId) {
+        storage.remove(userId);
+
+        return "deleted";
+    }
+
+    @Override
+    public String update(UserProfile userProfile) {
+        storage.remove(userProfile.getUserId());
+        storage.put(userProfile.getUserId(), userProfile);
+
+        return "updated";
     }
 
 }
