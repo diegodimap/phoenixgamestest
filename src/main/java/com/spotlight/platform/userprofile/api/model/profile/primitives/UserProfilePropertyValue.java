@@ -8,7 +8,7 @@ public class UserProfilePropertyValue {
     private final Object value;
 
     @JsonCreator
-    private UserProfilePropertyValue(Object value) {
+    public UserProfilePropertyValue(Object value) {
         this.value = value;
     }
 
@@ -17,7 +17,7 @@ public class UserProfilePropertyValue {
     }
 
     @JsonValue
-    protected Object getValue() {
+    public Object getValue() {
         return value;
     }
 

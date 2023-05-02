@@ -18,4 +18,8 @@ public class UserProfileService {
     public UserProfile get(UserId userId) {
         return userProfileDao.get(userId).orElseThrow(EntityNotFoundException::new);
     }
+
+    public String add(UserProfile userProfile) {
+        return userProfileDao.put(userProfile);
+    }
 }

@@ -6,7 +6,7 @@ import com.spotlight.platform.userprofile.api.model.common.AlphaNumericalStringW
 public class UserProfilePropertyName extends AlphaNumericalStringWithMaxLength implements Comparable<UserProfilePropertyName> {
 
     @JsonCreator
-    protected UserProfilePropertyName(String value) {
+    public UserProfilePropertyName(String value) {
         super(value);
     }
 

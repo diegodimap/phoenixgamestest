@@ -1,5 +1,7 @@
 package com.spotlight.platform.userprofile.api.web;
 
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.spotlight.platform.userprofile.api.core.json.JsonMapper;
 import com.spotlight.platform.userprofile.api.model.configuration.UserProfileApiConfiguration;
 import com.spotlight.platform.userprofile.api.web.exceptionmappers.EntityNotFoundExceptionMapper;
@@ -10,6 +12,7 @@ import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
+
 
 public class UserProfileApiApplication extends Application<UserProfileApiConfiguration> {
 

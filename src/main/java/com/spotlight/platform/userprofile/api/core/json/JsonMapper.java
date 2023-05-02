@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import io.dropwizard.jackson.Jackson;
 
 public class JsonMapper {
-    private static final ObjectMapper MAPPER_INSTANCE = createInstance();
+    public static final ObjectMapper MAPPER_INSTANCE = createInstance();
 
     private JsonMapper() {
     }

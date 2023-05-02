@@ -6,7 +6,8 @@ import com.spotlight.platform.userprofile.api.model.profile.primitives.UserId;
 import java.util.Optional;
 
 public interface UserProfileDao {
+
     Optional<UserProfile> get(UserId userId);
 
-    void put(UserProfile userProfile);
+    String put(UserProfile userProfile);
 }

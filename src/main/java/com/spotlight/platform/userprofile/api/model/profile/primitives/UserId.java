@@ -5,7 +5,7 @@ import com.spotlight.platform.userprofile.api.model.common.AlphaNumericalStringW
 
 public class UserId extends AlphaNumericalStringWithMaxLength {
     @JsonCreator
-    protected UserId(String value) {
+    public UserId(String value) {
         super(value);
     }
 
