@@ -3,10 +3,12 @@ package com.spotlight.platform.userprofile.api.core.profile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.spotlight.platform.userprofile.api.core.exceptions.EntityNotFoundException;
 import com.spotlight.platform.userprofile.api.core.profile.persistence.UserProfileDao;
+import com.spotlight.platform.userprofile.api.model.command.ReceivedCommand;
 import com.spotlight.platform.userprofile.api.model.profile.UserProfile;
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserId;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 
 public class UserProfileService {
     private final UserProfileDao userProfileDao;
@@ -34,5 +36,9 @@ public class UserProfileService {
 
     public String update(UserProfile userProfile) {
         return userProfileDao.update(userProfile);
+    }
+
+    public String replace(ReceivedCommand receivedCommand) {
+        return userProfileDao.replace(receivedCommand);
     }
 }

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.spotlight.platform.userprofile.api.core.profile.UserProfileService;
-import com.spotlight.platform.userprofile.api.core.profile.persistence.UserProfileDao;
 import com.spotlight.platform.userprofile.api.model.command.CommandProcesser;
 import com.spotlight.platform.userprofile.api.model.command.ReceivedCommand;
 import com.spotlight.platform.userprofile.api.model.profile.UserProfile;
@@ -41,7 +40,6 @@ public class UserResource {
     @Path("fill")
     @POST
     public String fillUserProfiles(){
-
         UserId userId1 = new UserId("de4310e5-b139-441a-99db-77c9c4a5fada");
         Instant now = Instant.now();
         Map<UserProfilePropertyName, UserProfilePropertyValue> userProfileProperties1 = new HashMap<>();
@@ -130,7 +128,7 @@ public class UserResource {
         return json;
     }
 
-
+    //COMMANDS SECTION
     @Path("profile/{command}")
     @POST
     public String vai(@Valid @PathParam("command") String command){
@@ -147,8 +145,8 @@ public class UserResource {
         ReceivedCommand receivedCommand = objectMapper.readValue(cmd, ReceivedCommand.class);
 
         //logica
-        if(receivedCommand.getType().equals("collect")){
-            response = commandProcesser.updateEntry(receivedCommand);
+        if(receivedCommand.getType().equals("replace")){
+            response = userProfileService.replace(receivedCommand);
         }
 
         return response;
