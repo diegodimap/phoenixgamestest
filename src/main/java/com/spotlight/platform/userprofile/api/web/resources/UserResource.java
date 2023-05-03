@@ -132,12 +132,6 @@ public class UserResource {
     }
 
     //COMMANDS SECTION
-    @Path("profile/{command}")
-    @POST
-    public String vai(@Valid @PathParam("command") String command){
-        return command;
-    }
-
     @Path("cmd/")
     @POST
     public String cmd(String cmd) throws JsonProcessingException {
@@ -147,9 +141,13 @@ public class UserResource {
 
         ReceivedCommand receivedCommand = objectMapper.readValue(cmd, ReceivedCommand.class);
 
-        //logica
+        //logic
         if(receivedCommand.getType().equals("replace")){
             response = userProfileService.replace(receivedCommand);
+        }
+
+        if(receivedCommand.getType().equals("increment")){
+            response = userProfileService.increment(receivedCommand);
         }
 
         return response;

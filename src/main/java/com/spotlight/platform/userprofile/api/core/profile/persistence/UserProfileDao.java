@@ -19,4 +19,6 @@ public interface UserProfileDao {
     String update(UserProfile userProfile);
 
     String replace(ReceivedCommand receivedCommand);
+
+    String increment(ReceivedCommand receivedCommand);
 }

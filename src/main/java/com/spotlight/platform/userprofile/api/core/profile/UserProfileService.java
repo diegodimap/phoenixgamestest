@@ -41,4 +41,8 @@ public class UserProfileService {
     public String replace(ReceivedCommand receivedCommand) {
         return userProfileDao.replace(receivedCommand);
     }
+
+    public String increment(ReceivedCommand receivedCommand) {
+        return userProfileDao.increment(receivedCommand);
+    }
 }

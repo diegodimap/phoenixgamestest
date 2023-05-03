@@ -68,4 +68,21 @@ public class UserProfileDaoInMemory implements UserProfileDao {
         return "replaced";
     }
 
+    @Override
+    public String increment(ReceivedCommand receivedCommand) {
+        Optional<UserProfile> userProfileOld = Optional.ofNullable(storage.get(new UserId(receivedCommand.getUserId())));
+
+        for (UserProfilePropertyName key : userProfileOld.get().getUserProfileProperties().keySet()) {
+            int valueAdd = receivedCommand.getProperties().get(key.toString()).intValue();
+            int oldValue = Integer.parseInt(userProfileOld.get().getUserProfileProperties().get(key).getValue().toString());
+
+            userProfileOld.get().getUserProfileProperties().replace(key, new UserProfilePropertyValue(oldValue+valueAdd));
+        }
+
+        storage.remove(userProfileOld.get().getUserId());
+        storage.put(userProfileOld.get().getUserId(), userProfileOld.get());
+
+        return "incremented";
+    }
+
 }
