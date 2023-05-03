@@ -21,4 +21,6 @@ public interface UserProfileDao {
     String replace(ReceivedCommand receivedCommand);
 
     String increment(ReceivedCommand receivedCommand);
+
+    String collect(ReceivedCommand receivedCommand);
 }

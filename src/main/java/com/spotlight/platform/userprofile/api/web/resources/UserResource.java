@@ -137,8 +137,6 @@ public class UserResource {
     public String cmd(String cmd) throws JsonProcessingException {
         String response = "";
 
-        System.out.println(cmd);
-
         ReceivedCommand receivedCommand = objectMapper.readValue(cmd, ReceivedCommand.class);
 
         //logic
@@ -148,6 +146,10 @@ public class UserResource {
 
         if(receivedCommand.getType().equals("increment")){
             response = userProfileService.increment(receivedCommand);
+        }
+
+        if(receivedCommand.getType().equals("collect")){
+            response = userProfileService.collect(receivedCommand);
         }
 
         return response;

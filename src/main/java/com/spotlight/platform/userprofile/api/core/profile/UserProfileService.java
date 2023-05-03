@@ -45,4 +45,8 @@ public class UserProfileService {
     public String increment(ReceivedCommand receivedCommand) {
         return userProfileDao.increment(receivedCommand);
     }
+
+    public String collect(ReceivedCommand receivedCommand) {
+        return userProfileDao.collect(receivedCommand);
+    }
 }
