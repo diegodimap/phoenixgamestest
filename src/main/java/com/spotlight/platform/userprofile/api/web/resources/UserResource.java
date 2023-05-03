@@ -17,8 +17,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Path("/users/{userId}")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -70,10 +69,14 @@ public class UserResource {
         Map<UserProfilePropertyName, UserProfilePropertyValue> userProfileProperties1 = new HashMap<>();
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode properties = mapper.readTree(userProfileJson);
+        JsonNode jsonNode = mapper.readTree(userProfileJson);
 
-        userProfileProperties1.put(new UserProfilePropertyName("currentGold"), new UserProfilePropertyValue(properties.get("userProfileProperties").get("currentGold")));
-        userProfileProperties1.put(new UserProfilePropertyName("currentGems"), new UserProfilePropertyValue(properties.get("userProfileProperties").get("currentGems")));
+        Iterator<String> propertyNames =  jsonNode.get("userProfileProperties").fieldNames();
+
+        for (Iterator<String> it = propertyNames; it.hasNext(); ) {
+            String property = it.next();
+            userProfileProperties1.put(new UserProfilePropertyName(property), new UserProfilePropertyValue(jsonNode.get("userProfileProperties").get(property)));
+        }
 
         UserProfile userProfile = new UserProfile(userId1, now.toString(), userProfileProperties1);
 

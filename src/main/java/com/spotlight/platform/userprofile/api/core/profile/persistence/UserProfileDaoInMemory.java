@@ -57,23 +57,9 @@ public class UserProfileDaoInMemory implements UserProfileDao {
     public String replace(ReceivedCommand receivedCommand) {
         Optional<UserProfile> userProfileOld = Optional.ofNullable(storage.get(new UserId(receivedCommand.getUserId())));
 
-        Iterator<String> fieldNames = receivedCommand.getProperties().fieldNames();
-        List<Object> fieldNamesActual = new ArrayList<>();
-        fieldNames.forEachRemaining(fieldNamesActual::add);
-
-        for (Object key : userProfileOld.get().getUserProfileProperties().keySet()) {
-            System.out.println("key1 : " + key);
-            System.out.println("value1 : " + userProfileOld.get().getUserProfileProperties().get(key).getValue());
-        }
-
         for (UserProfilePropertyName key : userProfileOld.get().getUserProfileProperties().keySet()) {
             int value = receivedCommand.getProperties().get(key.toString()).intValue();
             userProfileOld.get().getUserProfileProperties().replace(key, new UserProfilePropertyValue(value));
-        }
-
-        for (Object key : userProfileOld.get().getUserProfileProperties().keySet()) {
-            System.out.println("key2 : " + key);
-            System.out.println("value2 : " + userProfileOld.get().getUserProfileProperties().get(key).getValue());
         }
 
         storage.remove(userProfileOld.get().getUserId());
